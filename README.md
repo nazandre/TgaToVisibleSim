@@ -1,3 +1,15 @@
+# TgaToVisibleSim
+
+Convert a TGA image into a catoms2D configuration file supported by the VisibleSim simulator.
+
+### Compilation
+
+To compile TgaToVisibleSim, go into the `build/` folder and enter `make`
+
+```
+$ cd build/
+$ make
+```
 
 ### Usage
 
