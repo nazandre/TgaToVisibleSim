@@ -4,7 +4,7 @@ Convert a TGA image into a catoms2D configuration file supported by the VisibleS
 
 ### Compilation
 
-To compile TgaToVisibleSim, go into the `build/` folder and enter `make`
+To compile TgaToVisibleSim, go into the `build/` folder and enter `make`.
 
 ```
 $ cd build/
@@ -13,7 +13,8 @@ $ make
 
 ### Usage
 
-Below 
+TgaToVisibleSim works as following:
+
 ```
 Usage: tgaToVisibleSim -i <input tga image> [options]
 Options:
@@ -42,6 +43,8 @@ exporting to VisibleSim...
 
 Below are the original picture `images/example-red-car.tga` and a screenshot of VisibleSim loaded with the generated configuration `build/example-red-car.xml`.
 
-![](images/example-red-car.png?raw=true "`images/example-red-car.tga`")
+![](images/example-red-car.png?raw=true)
+*`images/example-red-car.tga`*
 
-![](screenshots/example-red-car-visiblesim.png?raw=true "Screenshot of VisibleSim when loaded with the configuration file `build/example-red-car.xml`")
+![](screenshots/example-red-car-visiblesim.png?raw=true)
+*"Screenshot of VisibleSim when loaded with the configuration file `build/example-red-car.xml`*
