@@ -44,7 +44,9 @@ exporting to VisibleSim...
 Below are the original picture `images/example-red-car.tga` and a screenshot of VisibleSim loaded with the generated configuration `build/example-red-car.xml`.
 
 ![](images/example-red-car.png?raw=true)
+
 *`images/example-red-car.tga`*
 
 ![](screenshots/example-red-car-visiblesim.png?raw=true)
-*"Screenshot of VisibleSim when loaded with the configuration file `build/example-red-car.xml`*
+
+*Screenshot of VisibleSim when loaded with the configuration file `build/example-red-car.xml`*
