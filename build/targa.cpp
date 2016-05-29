@@ -1,6 +1,7 @@
 #include <iostream>     // std::cout
 #include <fstream>      // std::ifstream
 #include <cstring>
+#include <cstdlib>
 
 #include "pixel.hpp"
 #include "targa.hpp"
@@ -31,7 +32,7 @@ Targa::Targa(const Targa &t) {
 }
 
 Targa::~Targa() {
-  delete buffer;
+  delete[] buffer;
 }
 
 void Targa::read() {
@@ -47,7 +48,7 @@ void Targa::read() {
   fin.seekg (0, ios::end);
   maxLen = fin.tellg();
   fin.seekg (0, ios::beg);
-
+  
   // allocation de la mémoire pour le fichier
   pData = new char [int(maxLen)];
 
@@ -57,10 +58,12 @@ void Targa::read() {
   fin.close();
 
   int commentOffset = int( (unsigned char)*pData );
+
   if( memcmp( pData + 1, DEF_targaHeaderContent, DEF_targaHeaderLength - 1 ) != 0 ) {
-    cerr << "Unknown format: " << input << endl;
-    return;
-    }
+    cerr << "ERROR: Unsupported format! Is " << input << " stored in a compressed format?"<< endl;
+    delete[] pData;
+    exit(EXIT_FAILURE);
+  }
   unsigned char smallArray[ 2 ];
 
   memcpy( smallArray, pData + DEF_targaHeaderLength + 0, 2 );
@@ -112,17 +115,19 @@ void Targa::read() {
   delete [] pData;
 
   /*if (retourner)
-    { unsigned char * pBufferRet = new unsigned char[ bodySize ],
-	*ptr1=pBuffer+width*(height-1)*4,*ptr2=pBufferRet;
-      for (int loop=0; loop<height; loop++)
-	{ memcpy(ptr2,ptr1,width*4);
-	  ptr2+=width*4;
-	  ptr1-=width*4;
-	}
-      delete [] pBuffer;
-      return pBufferRet;
-      }*/
-  
+    {*/
+  /*
+  unsigned char * pBufferRet = new unsigned char[ bodySize ],
+    *ptr1=pBuffer+width*(height-1)*4,*ptr2=pBufferRet;
+  for (int loop=0; loop<height; loop++)
+    { memcpy(ptr2,ptr1,width*4);
+      ptr2+=width*4;
+      ptr1-=width*4;
+    }
+  delete [] pBuffer;
+  buffer = pBufferRet;
+      //}
+      */
   // Ownership moves out.
   buffer = pBuffer;
 
@@ -146,14 +151,16 @@ ostream& Targa::exportToVisibleSim(ostream &output) {
   
   cerr << "exporting to VisibleSim..." << endl;
 
+  output << "<?xml version=\"1.0\" standalone=\"no\" ?>" << endl;
+  
   // header
   output << "<world gridSize=\"" << width+1 << "," << height+1 << "\">" << endl;
 
-  output << "<camera target=\"" << tx <<"," << ty << "," << tz << "\" directionSpherical=\"" << angleAzimut << "," << angleElevation << "," << distance << "\" angle=\"45\"/>" << endl;
-  output << "<spotlight target=\"" << tx << "," << ty << "," << tz << "\" directionSpherical=\"" << angleAzimut << "," << angleElevation << "," << distance << "\" angle=\"30\"/>" << endl;
+  output << "  <camera target=\"" << tx <<"," << ty << "," << tz << "\" directionSpherical=\"" << angleAzimut << "," << angleElevation << "," << distance << "\" angle=\"45\"/>" << endl;
+  output << "  <spotlight target=\"" << tx << "," << ty << "," << tz << "\" directionSpherical=\"" << angleAzimut << "," << angleElevation << "," << distance << "\" angle=\"30\"/>" << endl;
   
   // module list
-  output << "<blockList color=\"100,100,100\" blocksize=\"1,5,1\"> " << endl;
+  output << "  <blockList color=\"100,100,100\" blocksize=\"1,5,1\"> " << endl;
   for (int w = 0; w < width; w++) {
     for (int h = 0; h < height; h++) {
       // curent pixel index: h*width + w
@@ -169,13 +176,13 @@ ostream& Targa::exportToVisibleSim(ostream &output) {
       if (a != TRANSPARENT) {
 	size++;
 	Pixel p(r,g,b,a);
-	output << "<block position=\"" << x << "," << y << "\" "
+	output << "    <block position=\"" << x << "," << y << "\" "
 	       << "color=\"" << p << "\"/>" << endl;
       }
       
     }
   }
-  output << "</blockList>" << endl;
+  output << "  </blockList>" << endl;
   output << "</world>" << endl;
   cout << size << " modules " << endl;
   return output;

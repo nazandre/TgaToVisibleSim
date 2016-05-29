@@ -22,6 +22,8 @@ int main(int argc, char *argv[]) {
   ofstream output;
   output.open (arguments.output);
   tga.exportToVisibleSim(output);
+  output.close();
+  
   cerr << arguments.input << " exported in " << arguments.output << endl;
   return EXIT_SUCCESS;
 }
