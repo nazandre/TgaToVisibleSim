@@ -1,6 +1,6 @@
 # TgaToVisibleSim
 
-Convert a TGA image into a catoms2D configuration file supported by the VisibleSim simulator.
+Convert a TGA image into a catoms2D configuration file supported by the [VisibleSim simulator](http://projects.femto-st.fr/projet-visiblesim/).
 
 ### Compilation
 
